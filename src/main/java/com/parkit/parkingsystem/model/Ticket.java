@@ -1,5 +1,7 @@
 package com.parkit.parkingsystem.model;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -10,6 +12,16 @@ public class Ticket {
     private double price;
     private Date inTime;
     private Date outTime;
+
+    public boolean isRecuring() {
+        return isRecuring;
+    }
+
+    public void setRecuring(boolean recuring) {
+        isRecuring = recuring;
+    }
+
+    private boolean isRecuring;
 
     public int getId() {
         return id;
@@ -35,8 +47,13 @@ public class Ticket {
         this.vehicleRegNumber = vehicleRegNumber;
     }
 
+    /*
+    Rounded to 3 places / Arrondi a 3 chiffres
+     */
     public double getPrice() {
-        return price;
+        BigDecimal bigDecimal = new BigDecimal(Double.toString(price));
+        bigDecimal = bigDecimal.setScale(3, RoundingMode.HALF_UP);
+        return bigDecimal.doubleValue();
     }
 
     public void setPrice(double price) {
