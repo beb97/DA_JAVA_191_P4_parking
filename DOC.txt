@@ -1,0 +1,6 @@
+BOARD
+https://www.notion.so/bca5abea64994c73824fcbd8406a3f54?v=e5169060e73a4bd2bcdea722a30d748a
+ONBOARDING
+https://s3-eu-west-1.amazonaws.com/course.oc-static.com/projects/DAJava_P4/Kit+technique+d%E2%80%99onboarding+P4.pdf
+REPO 
+https://github.com/beb97/DA_JAVA_191_P4_parking
