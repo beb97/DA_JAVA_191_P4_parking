@@ -9,7 +9,7 @@ public class Ticket {
     private int id;
     private ParkingSpot parkingSpot;
     private String vehicleRegNumber;
-    private double price;
+    private Double price;
     private Date inTime;
     private Date outTime;
 
@@ -50,7 +50,7 @@ public class Ticket {
     /*
     Rounded to 3 places / Arrondi a 3 chiffres
      */
-    public double getPrice() {
+    public Double getPrice() {
         BigDecimal bigDecimal = new BigDecimal(Double.toString(price));
         bigDecimal = bigDecimal.setScale(3, RoundingMode.HALF_UP);
         return bigDecimal.doubleValue();

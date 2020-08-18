@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 
 public class FareCalculatorServiceTest {
@@ -93,7 +95,7 @@ public class FareCalculatorServiceTest {
         ticket.setOutTime(outTime);
         ticket.setParkingSpot(parkingSpot);
         fareCalculatorService.calculateFare(ticket);
-        assertEquals((0.75 * Fare.BIKE_RATE_PER_HOUR), ticket.getPrice() );
+        assertEquals( Double.valueOf(0.75 * Fare.BIKE_RATE_PER_HOUR), ticket.getPrice() );
     }
 
     @Test
@@ -108,7 +110,7 @@ public class FareCalculatorServiceTest {
         ticket.setOutTime(outTime);
         ticket.setParkingSpot(parkingSpot);
         fareCalculatorService.calculateFare(ticket);
-        assertEquals( (0.75 * Fare.CAR_RATE_PER_HOUR) , ticket.getPrice());
+        assertEquals( Double.valueOf(0.75 * Fare.CAR_RATE_PER_HOUR) , ticket.getPrice());
     }
 
     @Test
@@ -122,7 +124,40 @@ public class FareCalculatorServiceTest {
         ticket.setOutTime(outTime);
         ticket.setParkingSpot(parkingSpot);
         fareCalculatorService.calculateFare(ticket);
-        assertEquals( (24 * Fare.CAR_RATE_PER_HOUR) , ticket.getPrice());
+        assertEquals( Double.valueOf(24 * Fare.CAR_RATE_PER_HOUR) , ticket.getPrice());
     }
+
+    @Test
+    public void calculateFareCarWithLessThanThanThirtyMinuteParkingTime(){
+        Date inTime = new Date();
+        inTime.setTime( System.currentTimeMillis() - (   20 * 60 * 1000) );// 20 minutes parking time should give 0 fare
+        Date outTime = new Date();
+        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
+
+        ticket.setInTime(inTime);
+        ticket.setOutTime(outTime);
+        ticket.setParkingSpot(parkingSpot);
+        fareCalculatorService.calculateFare(ticket);
+        assertEquals( Double.valueOf(0) , ticket.getPrice());
+    }
+
+
+    @Test
+    public void calculateFareCarWithRecuringDiscount(){
+        Date inTime = new Date();
+        inTime.setTime( System.currentTimeMillis() - (  60 * 60 * 1000) );
+        Date outTime = new Date();
+        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
+
+        ticket.setRecuring(true);
+        ticket.setInTime(inTime);
+        ticket.setOutTime(outTime);
+        ticket.setParkingSpot(parkingSpot);
+        fareCalculatorService.calculateFare(ticket);
+        // One hour fare * 0.95, rounded up at 3 decimals
+        Double fare = new BigDecimal(Fare.CAR_RATE_PER_HOUR*Fare.DISCOUNT_RECURING_CUSTOMER).setScale(3, RoundingMode.HALF_UP).doubleValue();
+        assertEquals(fare, ticket.getPrice());
+    }
+
 
 }

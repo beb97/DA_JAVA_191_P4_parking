@@ -79,6 +79,7 @@ public class TicketDAO {
             ResultSet rs = ps.executeQuery();
             if(rs.next()){
                 Integer count = rs.getInt(1);
+                // La plaque d'immatriculation a plus d'un ticket en BDD.
                 ticket.setRecuring(count > 1);
             }
             dataBaseConfig.closeResultSet(rs);
